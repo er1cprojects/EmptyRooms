@@ -1,0 +1,128 @@
+#include <thread>
+#include <chrono>
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+
+int n, m;
+int a[11][11], rooms[11][11], p[11][11], i, j;
+int dx[] = {0, 1};
+int dy[] = {1, 0};
+
+void clean()
+{
+    cout << endl;
+    system("pause");
+    system("CLS");
+    return;
+}
+
+void display()
+{
+    rooms[1][1]=5;
+
+    for (int print_i = 1; print_i <= n; ++print_i)
+    {
+        cout << "| ";
+        for (int print_j = 1; print_j <= m; ++print_j)
+        {
+            cout << rooms[print_i][print_j] << " | ";
+        }
+        cout << endl;
+        for (int i = 0; i < m * 2 - 1; ++i)
+            cout << " - ";
+        cout << endl;
+    }
+}
+
+void backtracking(int x, int y)
+{
+    int i, newi, newj;
+    for (i = 0; i <= 1; ++i)
+    {
+        p[i][j] = 1;
+        newi = x + dx[i];
+        newj = y + dy[i];
+        if ((1 <= newi && newi <= n && 1 <= newj && newj <= m) && !p[newi][newj] && !a[newi][newj])
+        {
+            p[newi][newj] = 1;
+            rooms[newi][newj] += 1;
+            system("CLS");
+            cout << "----------------------------------------------------------------------------------" << endl;
+            cout << "Step available" << endl;
+            cout << "----------------------------------------------------------------------------------" << endl;
+            display();
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            system("CLS");
+            backtracking(newi, newj);
+            p[newi][newj] = 0;
+        }
+    }
+    system("CLS");
+    cout << "----------------------------------------------------------------------------------" << endl;
+    cout<<"Step not available"<<endl;
+    cout << "----------------------------------------------------------------------------------" << endl;
+    display();
+    std::this_thread::sleep_for(std::chrono::milliseconds(800));
+}
+
+int main()
+{
+    cout << "----------------------------------------------------------------------------------" << endl;
+    cout << "Welcome!" << endl;
+    cout << "Enter the dimensions of the matrix (maximum 10 lines or columns):" << endl;
+    cout << "----------------------------------------------------------------------------------" << endl;
+    cin >> n >> m;
+    if (n > 10 || m > 10) {
+        system("CLS");
+        cout << "----------------------------------------------------------------------------------" << endl;
+       cout << "One or both dimensions of the matrix exceed the maximum allowed." << endl;
+       cout << "----------------------------------------------------------------------------------" << endl;
+        cout<<"Thanks for using my program!"<<endl;
+        cout << "----------------------------------------------------------------------------------" << endl;
+       return 0;
+   }
+    cout << "----------------------------------------------------------------------------------" << endl;
+    cout << "Enter the elements of the matrix, the number 0 representing the free rooms:" << endl;
+    cout << "Any number other than 0 will represent a closed room in the problem."<<endl;
+    cout << "It will start from position (1,1), which will be displayed with the number 5 after execution." << endl;
+    cout << "The camera at position (x,y) is recommended to be 0."<<endl;
+    cout << "----------------------------------------------------------------------------------" << endl;
+    for (i = 1; i <= n; ++i)
+        for (j = 1; j <= m; ++j)
+            cin >> a[i][j];
+    if(a[n][m] != 0)
+    {
+        system("CLS");
+        cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
+        cout << "It is not possible to carry out the program, the camera at the position (" <<n<<","<<m<< ") is closed, so we could not reach it." << endl;
+        cout << "---------------------------------------------------------------------------------------------------------------------" << endl;
+        cout<<"Thanks for using my program!"<<endl;
+        return 0;
+    }
+
+    clean();
+    p[1][1] = 1;
+    backtracking(1, 1);
+    clean();
+    cout << "----------------------------------------------------------------------------------" << endl;
+    cout << "With 5 is represented the position (1,1), the starting position."<<endl;
+    cout << "Rooms in which we cannot move are represented by 0." << endl;
+    cout << "With digits it is represented in how many ways you can pass through the point(" <<n<<","<<m<< ")." << endl;
+    cout << "----------------------------------------------------------------------------------" << endl;
+    for (i = 1; i <= n; ++i){
+        cout << "| ";
+        for (j = 1; j <= m; ++j){
+            cout << rooms[i][j] << " | ";
+        }
+        cout << endl;
+        for (int i = 0; i < m * 2 - 1; ++i)
+            cout << " - ";
+        cout << endl;
+    }
+    cout << endl;
+    cout << "----------------------------------------------------------------------------------" << endl;
+    cout<<"Thanks for using my program!"<<endl;
+    cout << "----------------------------------------------------------------------------------" << endl;
+    return 0;
+}
